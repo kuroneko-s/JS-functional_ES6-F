@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="./js/_.js"></script>
+<script>
+let users = [
+    {id: 1, name: "ID", age: 25},
+    {id: 2, name: "AA", age: 43},
+    {id: 3, name: "BB", age: 42},
+    {id: 4, name: "CC", age: 41},
+    {id: 5, name: "DD", age: 34},
+    {id: 6, name: "EE", age: 34},
+    {id: 7, name: "FF", age: 27},
+    {id: 8, name: "GG", age: 18},
+    {id: 9, name: "HH", age: 31}
+];
+
+let ages = users.filter(function(obj) { return obj.age<=30 })
+// console.log(ages)
+let names = users.map(function(obj){ return obj.name})
+// console.log(names)
+
+let cus_age = _filter(users, function(obj) { return obj.age <= 30 ;} )
+// console.log(cus_age)
+
+// console.log(
+//     _map(document.querySelectorAll('*'), function(node){
+//         return node.nodeName;
+//     })
+// );
+
+let add = function(a, b){
+    return a + b;
+};
+
+let add_curry = _curry(add);
+let add10 = add_curry(10);
+// console.log(add10(5))
+// console.log(add_curry(10, 5))
+
+let sub_curryr = _curryr(function(a, b){
+    return a - b;
+})
+let sub10 = sub_curryr(10)
+// console.log(sub_curryr(10, 5))
+// console.log(sub10(5))
+
+let obj1 = {val: 15}
+let arr1 = [15]
+// console.log(_get(obj1, 'val'))
+// console.log(_get(arr1, 0))
+
+
+
+// console.log(_reduce([1,2,3,4,5], function(a, b) { return a + b; }, 0 ))
+// console.log(_reduce([1,2,3,4,5], function(a, b){ return a + b; }))
+
+let f = _pipe(
+    function(a) { return a + 1; },
+    function(a) { return a * 2; },
+    function(a) { return a * 5; });
+
+console.log(f(1))
+
+let go = _go(1,
+    function(a) { return a + 1; },
+    function(a) { return a * 2; },
+    function(a) { return a * 5; },
+    console.log);
+
+console.log(
+    _filter(users, function(user) {
+        return user.age >= 30;
+    }),
+    _get(users, 'name')
+);
+
+_go(
+    users,
+    function(users){
+        return _filter(users, function(user){
+            return user.age >= 30;
+        });
+    },
+    function(users){
+        return _map(users, function(val){
+            return _get(val, 'name')
+        })
+    },
+    console.log);
+
+_go(
+    users,
+    _filterCu(function(user){
+        return user.age >= 30;
+    }),
+    _mapCu(function(val){
+        return _get(val, 'age')
+    }),
+    console.log);
+    
+console.log(
+    _mapCu(function(val) {return val * 2})([1,2,3])
+)
+
+console.log(
+    _map([1,2,3], val => val + 5)
+)
+
+_each(null, console.log)
+console.log(_map(null, function(v) {return v;}))
+console.log( _keys([1,2,3,4]) )
+console.log( _keys(null) )
+
+</script>
+</body>
+</html>

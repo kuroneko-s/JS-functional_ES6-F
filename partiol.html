@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script src="js/partial.js"></script>
+<script>
+let users = [
+    {id: 1, name: "ID", age: 25},
+    {id: 2, name: "AA", age: 43},
+    {id: 3, name: "BB", age: 42},
+    {id: 4, name: "CC", age: 41},
+    {id: 5, name: "DD", age: 34},
+    {id: 6, name: "EE", age: 34},
+    {id: 7, name: "FF", age: 27},
+    {id: 8, name: "GG", age: 18},
+    {id: 9, name: "HH", age: 31}
+];
+
+let i = 0;
+_.go(
+    _.range(100),
+    _.map(function(val){
+        i++;
+        return val * val;
+    }),
+    _.filter(function(val){
+        return val % 2;
+    }),
+    console.log
+)
+
+console.log(i)
+
+_.go(
+    users,
+    _.filter(user => user.age > 30),
+    _.map(user => user.age),
+    _.reduce((val1, val2) => val1 + val2),
+    console.log
+)
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script src="js/partial.js"></script>
+<script>
+let users = [
+    {id: 1, name: "ID", age: 25},
+    {id: 2, name: "AA", age: 43},
+    {id: 3, name: "BB", age: 42},
+    {id: 4, name: "CC", age: 41},
+    {id: 5, name: "DD", age: 34},
+    {id: 6, name: "EE", age: 34},
+    {id: 7, name: "FF", age: 27},
+    {id: 8, name: "GG", age: 18},
+    {id: 9, name: "HH", age: 31}
+];
+
+let posts = [
+    {id: 10, title: "aa", user_id : 1},
+    {id: 20, title: "bb", user_id : 3},
+    {id: 30, title: "cc", user_id : 4},
+    {id: 40, title: "dd", user_id : 5},
+    {id: 50, title: "ee", user_id : 7},
+    {id: 60, title: "ff", user_id : 2},
+    {id: 70, title: "gg", user_id : 1},
+    {id: 80, title: "hh", user_id : 3},
+    {id: 90, title: "ii", user_id : 1}
+]
+
+let comments = [
+    {id: 100, body: "aa", post_id : 10, user_id : 1},
+    {id: 200, body: "bb", post_id : 30, user_id : 3},
+    {id: 300, body: "cc", post_id : 20, user_id : 4},
+    {id: 400, body: "dd", post_id : 50, user_id : 5},
+    {id: 500, body: "ee", post_id : 10, user_id : 7},
+    {id: 600, body: "ff", post_id : 70, user_id : 2},
+    {id: 700, body: "gg", post_id : 90, user_id : 1},
+    {id: 800, body: "hh", post_id : 90, user_id : 3},
+    {id: 900, body: "ii", post_id : 10, user_id : 1}
+]
+
+//index_by -> key와 1:1로 대응되는 값을 배열로 만든 것
+let users2 = _.index_by(users, 'id');
+
+let comments2 = _.go(
+    comments,
+    _.map(function(comment){
+        return _.extend({
+            user: users2[comment.user_id] || []
+        }, comment);
+    }),
+    _.group_by('post_id'));
+
+// console.log(comments2)
+
+//group_by 키를 기준으로 배열로 만드는 것
+
+let posts2 = _.go(
+    posts,
+    _.map(function(post){
+        return _.extend({
+            comments: comments2[post.id] || [],
+            user: users2[post.user_id] || []
+        }, post)
+    }),
+    _.group_by('user_id')
+);
+// console.log(posts2)
+
+let users3 = _.map(users2, function(user){
+    return _.extend({
+        post: posts2[user.id] || []
+    }, user);
+});
+// console.log(users3);
+
+let user = users3[0];
+console.log(user.post)
+
+_.go(
+    user.post,
+    _.pluck('comments'),
+    _.flatten,
+    _.pluck('user.name'),
+    _.uniq,
+    console.log
+)
+// pluck + flatten = deep_pluck
+console.log( _.uniq( _.deep_pluck(user, 'post.comments.user.name') ) )
+
+</script>
+</body>
+</html>
